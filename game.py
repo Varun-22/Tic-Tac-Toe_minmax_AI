@@ -39,3 +39,28 @@ def check(trix):
     elif('O' in set(temp)):
       return (1,'O')
   return (0,0)
+
+# print the matrix
+def printmatrix(mat):
+  boun = '---------'
+  print(boun)
+  for i in mat:
+    print('|',end = ' ')
+    for k in range(3):
+      if(i[k]=='_'):
+        print(' ',end=' ')
+        continue
+      print(i[k],end=' ')
+    print('|')
+  print(boun)
+
+# create matrix
+def makemat():
+  mat = []
+  mov = []
+  for i in range(3):
+    mat.append([])
+    for j in range(3):
+      mat[i].append('_')
+      mov.append([i+1,j+1])
+  return mat,mov
