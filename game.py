@@ -155,3 +155,109 @@ def checkhard(m,mo,v):
         scorei = i
         score = a
   return scorei
+
+# the game
+def game(plr):
+  mat,mov = makemat()
+  #random.shuffle(mov)
+  printmatrix(mat)
+  curr = 0
+  while(curr<10):
+    if(curr%2==0):
+      if(plr[0]=='user'):
+        try:
+          x,y = list(map(int,input('Enter the coordinates: ').split()))
+        except Exception:
+          print('You should enter numbers!')
+          continue
+        if(x>3 or y>3 or x<1 or y<1):
+          print('Coordinates should be from 1 to 3!')
+          continue
+        elif(mat[3-y][x-1]!='_'):
+          print('This cell is occupied! Choose another one!')
+          continue
+        else:
+          mat[3-y][x-1] = 'X'
+          mov.pop(mov.index([x,y]))
+          curr+=1
+      elif(plr[0]=='easy'):
+        print('Making move level "easy"')
+        ind = random.randint(0,len(mov)-1)
+        move = mov[ind]
+        mat[3-move[1]][move[0]-1] = 'X'
+        mov.pop(ind)
+        curr+=1
+      elif(plr[0]=='medium'):
+        print('Making move level "medium"')
+        ind = checkmed(mat,mov,'X')
+        move = mov[ind[0]]
+        mat[3-move[1]][move[0]-1] = 'X'
+        mov.pop(ind[0])
+        curr+=1
+      elif(plr[0]=='hard'):
+        print('Making move level "hard"')
+        ind = checkhard(mat,mov,'X')
+        move = mov[ind]
+        mat[3-move[1]][move[0]-1] = 'X'
+        mov.pop(ind)
+        curr+=1
+    else:
+      if(plr[1]=='user'):
+        try:
+          x,y = list(map(int,input('Enter the coordinates: ').split()))
+        except Exception:
+          print('You should enter numbers!')
+          continue
+        if(x>3 or y>3 or x<1 or y<1):
+          print('Coordinates should be from 1 to 3!')
+          continue
+        elif(mat[3-y][x-1]!='_'):
+          print('This cell is occupied! Choose another one!')
+          continue
+        else:
+          mat[3-y][x-1] = 'O'
+          mov.pop(mov.index([x,y]))
+          curr+=1
+      elif(plr[1]=='easy'):
+        print('Making move level "easy"')
+        ind = random.randint(0,len(mov)-1)
+        move = mov[ind]
+        mat[3-move[1]][move[0]-1] = 'O'
+        mov.pop(ind)
+        curr+=1
+      elif(plr[1]=='medium'):
+        print('Making move level "medium"')
+        ind = checkmed(mat,mov,'O')
+        move = mov[ind[0]]
+        mat[3-move[1]][move[0]-1] = 'O'
+        mov.pop(ind[0])
+        curr+=1
+      elif(plr[1]=='hard'):
+        print('Making move level "hard"')
+        ind = checkhard(mat,mov,'O')
+        move = mov[ind]
+        mat[3-move[1]][move[0]-1] = 'O'
+        mov.pop(ind)
+        curr+=1
+    printmatrix(mat)
+    #  check result
+    winner = check(mat)
+    if(winner[0]):
+      print(winner[1],'wins')
+      break
+    if(9-curr == 0):
+      print('Draw')
+      break
+
+# driver
+while(True):
+  b2 = ['easy','user','medium','hard']
+  a = input('Input command: ').split()
+  if(len(a)==1 and a[0]=='exit'):
+    break
+  if(len(a)!=3):
+    print('Bad parameters!')
+  elif(a[0]=='start' and a[1] in b2 and a[2] in b2):
+    game(a[1:])
+  else:
+    print('Bad parameters!')
