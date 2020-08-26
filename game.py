@@ -104,5 +104,54 @@ def checkmed(m,x,val):
       r3 = (m[(temp[0])%3][(temp[1]+1)%3] == m[(temp[0])%3][(temp[1]+2)%3]) and (m[(temp[0])%3][(temp[1]+2)%3]!=val) and (m[(temp[0])%3][(temp[1]+2)%3]!='_')
       raw = r1 or r2 or r3
       if(raw):
-        return [x.index(i),'block']    
+        return [x.index(i),'block']
   return [random.randint(0,len(x)-1),'random']
+
+# minmax
+def minmax(matrix,move,value,win,level):
+  res = check(matrix)
+  score = 1000
+  scorei = 0
+  if(res[0]):
+    if(res[1]==win):
+      return level
+    else:
+      return -level
+  else:
+    if(move):
+      for i in range(len(move)):
+        tmo = copy.deepcopy(move)
+        mat = copy.deepcopy(matrix)
+        mat[3-move[i][1]][move[i][0]-1] = value
+        tmo.pop(i)
+        if(value=='X'):
+          score = min(score,minmax(mat,tmo,'O',win,level-10))
+        else:
+          score = min(score,minmax(mat,tmo,'X',win,level-10))
+      return score
+    else:
+      return 0
+
+# hard level game
+def checkhard(m,mo,v):
+  score = -1000
+  scorei = 0
+  medres = checkmed(m,mo,v)
+  if(medres[1]=='block' or medres[1]=='win'):
+    return medres[0]
+  for i in range(len(mo)):
+    tm = copy.deepcopy(mo)
+    mt = copy.deepcopy(m)
+    tm.pop(i)
+    mt[3-mo[i][1]][mo[i][0]-1] = v
+    if(v=='X'):
+      a = minmax(mt,tm,'O',v,100)
+      if(a>=score):
+        scorei = i
+        score = a
+    else:
+      a = minmax(mt,tm,'X',v,100)
+      if(a>=score):
+        scorei = i
+        score = a
+  return scorei
